@@ -45,7 +45,7 @@ Architecture: any
 Multi-Arch: foreign
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: utilities for manipulating Mac OS icns files
- icnsutils includes icns2png and png2icns, two utilies used to
+ icnsutils includes icns2png and png2icns, two utilities used to
  extract PNG images from icns files, and create icns files from
  PNG images.
 Section: graphics
