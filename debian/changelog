@@ -2,6 +2,7 @@ libicns (0.8.1-2) UNRELEASED; urgency=medium
 
   * Fix typo in package description (Closes: #750900)
   * New URLs for the SVN repository
+  * Bump Standards-Version, no changes needed
 
  -- Paul Wise <pabs@debian.org>  Wed, 17 Sep 2014 22:09:06 +0800
 
