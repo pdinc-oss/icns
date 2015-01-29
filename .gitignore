@@ -1,5 +1,5 @@
 # Please only change this file from SVN:
-# svn co https://icns.svn.sourceforge.net/svnroot/icns icns-svn
+# svn co https://svn.code.sf.net/p/icns/code icns-svn
 # $EDITOR icns-svn/.gitignore
 # svn propset -R svn:ignore -F icns-svn/.gitignore icns-svn
 # svn commit icns-svn
