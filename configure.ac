@@ -4,6 +4,7 @@ AC_PREREQ(2.59)
 AC_INIT(libicns, 0.8.1, mathew@eisbox.net)
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([src/icns.h])
+AC_CONFIG_MACRO_DIR([m4])
 AM_MAINTAINER_MODE([enable])
 
 # To enable debugging mode
