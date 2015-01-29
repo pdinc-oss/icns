@@ -656,6 +656,8 @@ exception:
 	{
 		*dataSizeOut = 0;
 		*dataPtrOut = NULL;
+		free(dataPtr);
+		dataPtr = NULL;
 	}
 	else
 	{
