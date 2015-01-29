@@ -27,7 +27,7 @@ icnsutil_LDADD = \
 man_MANS = \
   icns2png.1 \
   icontainer2icns.1 \
-  png2icns.1 \ 
+  png2icns.1 \
   icnsutil.1
 
 EXTRA_DIST = \
