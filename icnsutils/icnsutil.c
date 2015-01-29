@@ -331,10 +331,10 @@ static int add_png_to_family(icns_family_t **iconFamily, char *pngname)
 	int iconDataOffset = 0;
 	int maskDataOffset = 0;
 
-    char isHiDPI = 0;
+	char isHiDPI = 0;
 
-    int pngnamelen = strlen(pngname);
-    int namea2xpng = pngnamelen - 7;
+	int pngnamelen = strlen(pngname);
+	int namea2xpng = pngnamelen - 7;
 
 	png_bytep buffer;
 	int width, height, bpp;
@@ -532,7 +532,7 @@ int iconset_to_icns(char *srcfile, char *dstfile)
 
 	fclose(icnsfile);
 
-  #if DEBUG_ICNSUTIL
+	#if DEBUG_ICNSUTIL
 	printf("Saved icns file to %s\n",dstfile);
 	#endif
 
@@ -552,7 +552,7 @@ cleanup:
 
 int icns_to_iconset(char *srcfile, char *dstpath)
 {
-  FILE *inFile = NULL;
+	FILE *inFile = NULL;
 	char *outfile = NULL;
 	int	srclen = strlen(srcfile);
 	icns_family_t *iconFamily = NULL;
@@ -588,9 +588,9 @@ int icns_to_iconset(char *srcfile, char *dstpath)
 	dstfile = malloc(dstfilelen);
 	strncpy(&dstfile[0],&dstpath[0],dstpathlen);
 
-  #if DEBUG_ICNSUTIL
+	#if DEBUG_ICNSUTIL
 	printf("Extracting images from %s\n",&srcfile[0]);
-  #endif
+	#endif
 
 	// Load the icns file
 	inFile = fopen(srcfile, "r" );
@@ -603,13 +603,13 @@ int icns_to_iconset(char *srcfile, char *dstpath)
 
 	// Create the .iconset directory
 	if (mkdir(dstpath,0777) == -1) {
-	  if(errno == EEXIST) {
-	    errno = 0;
-	  } else {
+		if(errno == EEXIST) {
+			errno = 0;
+		} else {
 			fprintf (stderr, "Error creating directory %s!\n",&dstpath[0]);
-	    error = 1;
-	    goto cleanup;
-	  }
+			error = 1;
+			goto cleanup;
+		}
 	}
 
 	// Loop through all the expected names/types and try to find + save

@@ -31,7 +31,7 @@ Boston, MA 02110-1301, USA.
 /***************************** ICNS_MEMCPY **************************/
 #if HAVE_UNALIGNED_MEMCPY == 0
 __attribute__ ((noinline)) void *icns_memcpy( void *dst, const void *src, size_t num ) {
- return memcpy(dst,src,num);
+	return memcpy(dst,src,num);
 }
 #endif
 
@@ -73,8 +73,8 @@ static inline void icns_read_be(void *outp, void *inp, int size)
 	case 8:
 		*((uint64_t *)(outp)) = b[7]|b[6]<<8| \
 		                        b[5]<<16|b[4]<<24| \
-					(uint64_t)b[3]<<32|(uint64_t)b[2]<<40| \
-					(uint64_t)b[1]<<48|(uint64_t)b[0]<<56;
+		              (uint64_t)b[3]<<32|(uint64_t)b[2]<<40| \
+		              (uint64_t)b[1]<<48|(uint64_t)b[0]<<56;
 		break;
 
 	// This is a special case needed by icns_read_macbinary_resource_fork
@@ -1187,7 +1187,7 @@ int icns_read_macbinary_resource_fork(icns_size_t dataSize,icns_byte_t *dataPtr,
 	// Check that we are not reading invalid memory
 	if( (resourceDataStart < 128) || (resourceDataStart > dataSize) ) {
 		icns_print_err("icns_read_macbinary_resource_fork: Invalid resource data start!\n");
-	       	return ICNS_STATUS_INVALID_DATA;
+		return ICNS_STATUS_INVALID_DATA;
 	}
 	if( (resourceDataSize < 16) || (resourceDataSize > (dataSize-128))  ) {
 		icns_print_err("icns_read_macbinary_resource_fork: Invalid resource data size!\n");
@@ -1340,7 +1340,7 @@ int icns_read_apple_encoded_resource_fork(icns_size_t dataSize,icns_byte_t *data
 
 	if( (resourceDataStart < 38) || (resourceDataStart > dataSize) ) {
 		icns_print_err("icns_read_apple_encoded_resource_fork: Invalid resource data start!\n");
-	       	return ICNS_STATUS_INVALID_DATA;
+		return ICNS_STATUS_INVALID_DATA;
 	}
 	if( (resourceDataSize < 16) || (resourceDataSize > (dataSize-38))  ) {
 		icns_print_err("icns_read_apple_encoded_resource_fork: Invalid resource data size!\n");
@@ -1480,7 +1480,7 @@ icns_bool_t icns_macbinary_header_check(icns_size_t dataSize,icns_byte_t *dataPt
 	resourceDataStart = fileDataSize + fileDataPadding + 128;
 
 	if( (resourceDataStart < 128) || (resourceDataStart > dataSize) )
-	       	return 0;
+		return 0;
 
 	if( (resourceDataSize < 16) || (resourceDataSize > (dataSize-128))  )
 		return 0;

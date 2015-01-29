@@ -251,7 +251,7 @@ int main(int argc, char *argv[])
 	extractMode = 0; // Do nothing
 
 	// error messages handled by ParseOptions
-    result = ParseOptions(argc, argv);
+	result = ParseOptions(argc, argv);
 	if(result != CONVERSION_SUCCESS)
 		return result;
 
@@ -263,9 +263,9 @@ int main(int argc, char *argv[])
         int convresult = ExtractAndDescribeIconFamilyFile(inputFileNames[count]);
 		if(convresult != ICNS_STATUS_OK) {
 			fprintf(stderr, "Errors while extracting icns data from %s!\n",inputFileNames[count]);
-            if(result == CONVERSION_SUCCESS)
-                result = CONVERSION_FAILURE;
-        }
+			if(result == CONVERSION_SUCCESS)
+				result = CONVERSION_FAILURE;
+		}
 	}
 
 	for(count = 0; count < fileCount; count++)
@@ -501,7 +501,7 @@ int ExtractAndDescribeIconFamily(icns_family_t *iconFamily,char *description,cha
 	if(extractMode & LIST_MODE)
 		printf(" Listing icon elements...\n");
 
-    // Loop through and convert each icon
+	// Loop through and convert each icon
 	while(((dataOffset+8) < iconFamily->resourceSize) && (error == 0 || error == ICNS_STATUS_UNSUPPORTED))
 	{
 		icns_element_t	 iconElement;
@@ -609,7 +609,7 @@ int ExtractAndDescribeIconFamily(icns_family_t *iconFamily,char *description,cha
 			}
 			break;
 			default:
-            {
+			{
 				iconInfo = icns_get_image_info_for_type(iconElement.elementType);
 
 				if(iconInfo.iconWidth == iconInfo.iconHeight) {
@@ -626,8 +626,8 @@ int ExtractAndDescribeIconFamily(icns_family_t *iconFamily,char *description,cha
 					iconDimSize = -1;
 				}
 
-                if(iconInfo.isImage)
-                    imageCount++;
+				if(iconInfo.isImage)
+					imageCount++;
 
 				if(extractMode & LIST_MODE)
 				{
@@ -651,12 +651,12 @@ int ExtractAndDescribeIconFamily(icns_family_t *iconFamily,char *description,cha
 
 				if(extractMode & EXTRACT_MODE)
 				{
-				if(extractIconSize == ALL_SIZES || extractIconSize == iconDimSize)
-				{
-				if(extractIconDepth == ALL_DEPTHS || extractIconDepth == iconInfo.iconBitDepth)
-				{
-				if(iconInfo.isImage)
-				{
+					if(extractIconSize == ALL_SIZES || extractIconSize == iconDimSize)
+					{
+					if(extractIconDepth == ALL_DEPTHS || extractIconDepth == iconInfo.iconBitDepth)
+					{
+					if(iconInfo.isImage)
+					{
 					unsigned int	outfilepathlength = 0;
 					FILE 		*outfile = NULL;
 					icns_image_t	iconImage;
@@ -665,11 +665,11 @@ int ExtractAndDescribeIconFamily(icns_family_t *iconFamily,char *description,cha
 
 					error = icns_get_image32_with_mask_from_family(iconFamily,iconElement.elementType,&iconImage);
 
-                    if(error == ICNS_STATUS_UNSUPPORTED)
-                    {
-                        printf("  Unable to convert '%s' element! (Unsupported by this version of libicns)\n",typeStr);
-                    }
-                    else if(error != ICNS_STATUS_OK)
+					if(error == ICNS_STATUS_UNSUPPORTED)
+					{
+						printf("  Unable to convert '%s' element! (Unsupported by this version of libicns)\n",typeStr);
+					}
+					else if(error != ICNS_STATUS_OK)
 					{
 						fprintf (stderr, "Unable to load 32-bit icon image with mask from icon family!\n");
 					}
@@ -708,8 +708,8 @@ int ExtractAndDescribeIconFamily(icns_family_t *iconFamily,char *description,cha
 				}
 				}
 				}
-            }
-            break;
+			}
+			break;
 		}
 
 		// Move on to the next element
@@ -729,11 +729,11 @@ int ExtractAndDescribeIconFamily(icns_family_t *iconFamily,char *description,cha
 	if(extractMode & EXTRACT_MODE)
 	{
 		if(extractedCount > 0) {
-            if(extractedCount == imageCount) {
-                printf("Extracted %d images from %s.\n",extractedCount,description);
-            } else {
-                printf("Extracted %d of %d images from %s.\n",extractedCount,imageCount,description);
-            }
+			if(extractedCount == imageCount) {
+				printf("Extracted %d images from %s.\n",extractedCount,description);
+			} else {
+				printf("Extracted %d of %d images from %s.\n",extractedCount,imageCount,description);
+			}
 		} else {
 			printf("No elements were extracted from %s.\n",description);
 		}

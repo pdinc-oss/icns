@@ -215,11 +215,11 @@ void decodeArchive(FILE *stream,char archiveTypeID)
 				printf("%sMethod One Way [UNHANDLED]\n",spaces);
 				break;
 			case '^': // 0x5E - pointer to type
-				  // Note, followed by type?
+				// Note, followed by type?
 				printf("%sPointer to Type [UNHANDLED]\n",spaces);
 				break;
 			case 'b': // 0x62 - bit field
-				  // Note, followed by NUM bits?
+				// Note, followed by NUM bits?
 				printf("%sBit Feild [UNHANDLED]\n",spaces);
 				break;
 			case 'c': // 0x63 - char

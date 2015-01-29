@@ -630,10 +630,10 @@ icns_type_t	icns_get_type_from_image_info_advanced(icns_icon_info_t iconInfo, ic
 				return ICNS_32x32_8BIT_MASK;
 			break;
 		case 32:
-		  if(isHiDPI)
-		    return ICNS_16x16_2X_32BIT_ARGB_DATA;
+			if(isHiDPI)
+				return ICNS_16x16_2X_32BIT_ARGB_DATA;
 			else
-			  return ICNS_32x32_32BIT_DATA;
+				return ICNS_32x32_32BIT_DATA;
 			break;
 		default:
 			return ICNS_NULL_TYPE;
@@ -667,11 +667,11 @@ icns_type_t	icns_get_type_from_image_info_advanced(icns_icon_info_t iconInfo, ic
 		}
 		break;
 	case 64:
-	  if(iconInfo.iconBitDepth == 32)
-	    return ICNS_32x32_2X_32BIT_ARGB_DATA;
-	  else
-	    return ICNS_NULL_TYPE;
-	  break;
+		if(iconInfo.iconBitDepth == 32)
+			return ICNS_32x32_2X_32BIT_ARGB_DATA;
+		else
+			return ICNS_NULL_TYPE;
+		break;
 	case 128:
 		if(iconInfo.isImage == 1 || iconInfo.iconBitDepth == 32)
 			return ICNS_128X128_32BIT_DATA;
@@ -679,22 +679,22 @@ icns_type_t	icns_get_type_from_image_info_advanced(icns_icon_info_t iconInfo, ic
 			return ICNS_128X128_8BIT_MASK;
 		break;
 	case 256:
-    if(isHiDPI)
-      return ICNS_128x128_2X_32BIT_ARGB_DATA;
-    else
-      return ICNS_256x256_32BIT_ARGB_DATA;
+		if(isHiDPI)
+			return ICNS_128x128_2X_32BIT_ARGB_DATA;
+		else
+			return ICNS_256x256_32BIT_ARGB_DATA;
 		break;
 	case 512:
-    if(isHiDPI)
-      return ICNS_256x256_2X_32BIT_ARGB_DATA;
-    else
-      return ICNS_512x512_32BIT_ARGB_DATA;
+		if(isHiDPI)
+			return ICNS_256x256_2X_32BIT_ARGB_DATA;
+		else
+			return ICNS_512x512_32BIT_ARGB_DATA;
 		break;
 	case 1024:
-    if(isHiDPI)
-      return ICNS_512x512_2X_32BIT_ARGB_DATA;
-    else
-      return ICNS_1024x1024_32BIT_ARGB_DATA;
+		if(isHiDPI)
+			return ICNS_512x512_2X_32BIT_ARGB_DATA;
+		else
+			return ICNS_1024x1024_32BIT_ARGB_DATA;
 		break;
 
 	}
@@ -704,7 +704,7 @@ icns_type_t	icns_get_type_from_image_info_advanced(icns_icon_info_t iconInfo, ic
 
 icns_type_t	icns_get_type_from_image_info(icns_icon_info_t iconInfo)
 {
-  return icns_get_type_from_image_info_advanced(iconInfo,0);
+	return icns_get_type_from_image_info_advanced(iconInfo,0);
 }
 
 icns_type_t	icns_get_type_from_image(icns_image_t iconImage)
@@ -790,7 +790,7 @@ icns_bool_t icns_get_is_hidpi(icns_type_t iconType)
 	case ICNS_512x512_2X_32BIT_ARGB_DATA:
 		return 1;
 	default:
-	  return 0;
+		return 0;
 	}
 }
 
