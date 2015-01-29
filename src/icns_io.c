@@ -294,7 +294,7 @@ int icns_read_family_from_file(FILE *dataFile,icns_family_t **iconFamilyOut)
 				dataPtr = NULL;
 				dataSize = 0;
 				error = ICNS_STATUS_IO_READ_ERR;
-				icns_print_err("icns_read_family_from_file: Error occured reading file!\n");
+				icns_print_err("icns_read_family_from_file: Error occurred reading file!\n");
 				goto exception;
 			}
 		}
@@ -308,7 +308,7 @@ int icns_read_family_from_file(FILE *dataFile,icns_family_t **iconFamilyOut)
 	else
 	{
 		error = ICNS_STATUS_IO_READ_ERR;
-		icns_print_err("icns_read_family_from_file: Error occured seeking to end of file!\n");
+		icns_print_err("icns_read_family_from_file: Error occurred seeking to end of file!\n");
 		goto exception;
 	}
 	
@@ -471,7 +471,7 @@ int icns_read_family_from_rsrc(FILE *dataFile,icns_family_t **iconFamilyOut)
 				dataPtr = NULL;
 				dataSize = 0;
 				error = ICNS_STATUS_IO_READ_ERR;
-				icns_print_err("icns_read_family_from_rsrc: Error occured reading file!\n");
+				icns_print_err("icns_read_family_from_rsrc: Error occurred reading file!\n");
 				goto exception;
 			}
 		}
@@ -485,7 +485,7 @@ int icns_read_family_from_rsrc(FILE *dataFile,icns_family_t **iconFamilyOut)
 	else
 	{
 		error = ICNS_STATUS_IO_READ_ERR;
-		icns_print_err("icns_read_family_from_rsrc: Error occured seeking to end of file!\n");
+		icns_print_err("icns_read_family_from_rsrc: Error occurred seeking to end of file!\n");
 		goto exception;
 	}
 	
@@ -804,7 +804,7 @@ int icns_parse_family_data(icns_size_t dataSize,icns_byte_t *dataPtr,icns_family
 				goto exception;
 			}
 			
-			// 'Fix' the value's endianess for working with with them
+			// 'Fix' the value's endianness for working with with them
 			ICNS_WRITE_UNALIGNED( dataPtr+dataOffset, elementType, sizeof(icns_type_t));
 			ICNS_WRITE_UNALIGNED( dataPtr+dataOffset+4, elementSize, sizeof(icns_size_t));
 			

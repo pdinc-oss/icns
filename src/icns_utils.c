@@ -579,7 +579,7 @@ icns_type_t	icns_get_type_from_image_info_advanced(icns_icon_info_t iconInfo, ic
 		}
 	}
 	
-	// Width must equal hieght from here on...
+	// Width must equal height from here on...
 	if(iconInfo.iconWidth != iconInfo.iconHeight)
 		return ICNS_NULL_TYPE;
 	
