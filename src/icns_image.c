@@ -139,7 +139,7 @@ int icns_get_image32_with_mask_from_family(icns_family_t *iconFamily,icns_type_t
 	// Note that we could arguably recover from not having a mask
 	// by creating a dummy blank mask. However, the icns data type
 	// should always have the corresponding mask present. This
-	// function was designed to retreive a VALID image... There are
+	// function was designed to retrieve a VALID image... There are
 	// other API functions better used if the goal is editing, data
 	// recovery, etc.
 	if(error) {

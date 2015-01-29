@@ -4,7 +4,7 @@ Building libicns
 You will need a copy of zlib, and libpng. Additionally, you will need a copy
 of either libjasper or libopenjpeg. If you do not want to install those
 libraries, you will need to build them, then modify the Makefile to build
-against the static libraries in thier respective directories.
+against the static libraries in their respective directories.
 
 For a complete build of libicns and icns2png, you should check the Makefile
 to ensure you are building against the correct libraries, then run

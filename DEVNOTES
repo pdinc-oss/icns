@@ -53,7 +53,7 @@ OpenJPEG (libopenjpeg)
 Building libicns against the OpenJPEG library will provide full read
 support of 256x256 and 512x512 icns data. However, it's distribution at
 present is quite limited, and there seems to be an ongoing debate as
-to it's compatability with free software guidelines.
+to it's compatibility with free software guidelines.
 
 ===============================================================================
 Version information
@@ -76,7 +76,7 @@ The revision number should increase with each development change, and return
 The minor number should increase with change that adds, removes, or changes
  the functionality of libicns or it's utility programs.
 The major number should increase with any change that dramatically breaks
- compatability with some major part of the library or utilities
+ compatibility with some major part of the library or utilities
 ===============================================================================
 Naming conventions
 

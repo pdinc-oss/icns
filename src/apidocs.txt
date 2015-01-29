@@ -31,7 +31,7 @@
         ii. Retriving a image or mask from an icon element
         iii. Initializing an empty image - ready for data
         iv. Freeing the memory allocated by an icon image
-     * Part VI: Decoding and encoding image data for certian formats
+     * Part VI: Decoding and encoding image data for certain formats
          i. Decoding and encoding 3 channel RLE data
         ii. Decoding and encoding jpeg2000 image data
      * Part VII: Misc utility functions
@@ -213,11 +213,11 @@ static const icns_type_t  ICNS_NULL_TYPE                 = {{ 0 , 0 , 0 , 0 }};
    return code constant       value description
    ICNS_STATUS_OK             0     no error
    ICNS_STATUS_NULL_PARAM     -1    a null pointer was passed to a function
-   ICNS_STATUS_NO_MEMORY      -2    an error occured allocating memory
+   ICNS_STATUS_NO_MEMORY      -2    an error occurred allocating memory
    ICNS_STATUS_INVALID_DATA   -3    invalid data was read or passed to a
                                     function
-   ICNS_STATUS_IO_READ_ERR    1     an error occured while reading a file
-   ICNS_STATUS_IO_WRITE_ERR   2     an error occured while writing to a file
+   ICNS_STATUS_IO_READ_ERR    1     an error occurred while reading a file
+   ICNS_STATUS_IO_WRITE_ERR   2     an error occurred while writing to a file
    ICNS_STATUS_DATA_NOT_FOUND 3     the necessary or requested data was not
                                     found
    ICNS_STATUS_UNSUPPORTED    4     64-bit unsigned int
@@ -300,7 +300,7 @@ static const icns_type_t  ICNS_NULL_TYPE                 = {{ 0 , 0 , 0 , 0 }};
    int icns_free_image(icns_image_t *imageIn);
      __________________________________________________________________
 
-   Part VI: Decoding and encoding image data for certian formats
+   Part VI: Decoding and encoding image data for certain formats
    Decoding and encoding 3 channel RLE data
 
    int icns_decode_rle24_data(icns_size_t dataSizeIn, icns_byte_t

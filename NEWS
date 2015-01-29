@@ -96,7 +96,7 @@ Release 0.5.5  (03/17/2008)
 
 Release 0.5.2  (03/11/2008)
 # Sourceforge SVN rev 93 - 101
-- Restructured code tree to seperate icns2png from libicns
+- Restructured code tree to separate icns2png from libicns
 - Minor bugfixes
 
 Release 0.5.1  (03/07/2008)
@@ -178,5 +178,5 @@ Release 0.0.3 (12/18/2002)
 - Updated README with unstuff information
 
 Release 0.0.2 (01/11/2002)
-- Inital public release
+- Initial public release
 
