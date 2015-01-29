@@ -97,19 +97,19 @@ int main(void)
 	FILE            *inFile = NULL;
 	icns_family_t	*iconFamily = NULL;
 	icns_image_t	iconImage;
-	
+
 	inFile = fopen( "test.icns", "r" );
-	
+
 	if( inFile == NULL ) {
 		fprintf(stderr,"Unable to open test.icns!\n");
 		goto cleanup;
 	}
-	
+
 	// Import icon family from the file data
 	error = icns_read_family_from_file(inFile,&iconFamily);
-		
+
 	fclose(inFile);
-		
+
 	if(error) {
 		fprintf(stderr,"Unable to read icns family from file!\n");
 	} else {
@@ -117,7 +117,7 @@ int main(void)
 		// Read in a 128x128 32-bit RGBA image (with mask in alpha channel)
 		// from the 128x128 32-bit icon and 128x128 8-bit mask
 		error = icns_get_image32_with_mask_from_family(iconFamily,ICNS_128X128_32BIT_DATA,&iconImage);
-		
+
 		if(error) {
 			fprintf(stderr,"Unable to get 128x128 image icon family!\n");
 		} else {
@@ -128,17 +128,17 @@ int main(void)
 			printf("image pixel depth: %d\n",image->imagePixelDepth);
 			printf("image data size: %ul\n",image->imageDataSize);
 		}
-		
+
 		// Free the memory used by the image
 		icns_image_free(&iconImage);
 	}
-	
+
 	// Free the memory used by the icon family
 	if(iconFamily != NULL) {
 		free(iconFamily);
 		iconFamily = NULL;
 	}
-	
+
 	return error;
 }
 </PRE>

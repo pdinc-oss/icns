@@ -17,7 +17,7 @@ libicns_la_SOURCES = \
   icns_utils.c \
   icns_colormaps.h \
   icns_internals.h \
-  icns.h 
+  icns.h
 
 AM_CFLAGS = -Wall
 

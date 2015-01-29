@@ -14,7 +14,7 @@ Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the
-Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
@@ -70,26 +70,26 @@ int icns_png_to_image(icns_size_t dataSize, icns_byte_t *dataPtr, icns_image_t *
 	int32_t color_type;
 	int row;
 	int rowsize;
-	
-	
+
+
 	if(dataPtr == NULL)
 	{
 		icns_print_err("icns_png_to_image: JP2 data is NULL!\n");
 		return ICNS_STATUS_NULL_PARAM;
 	}
-	
+
 	if(imageOut == NULL)
 	{
 		icns_print_err("icns_png_to_image: Image out is NULL!\n");
 		return ICNS_STATUS_NULL_PARAM;
 	}
-	
+
 	if(dataSize == 0)
 	{
 		icns_print_err("icns_png_to_image: Invalid data size! (%d)\n",dataSize);
 		return ICNS_STATUS_INVALID_DATA;
 	}
-	
+
 	#ifdef ICNS_DEBUG
 	printf("Decoding PNG image...\n");
 	#endif
@@ -115,8 +115,8 @@ int icns_png_to_image(icns_size_t dataSize, icns_byte_t *dataPtr, icns_image_t *
 
 	// set libpng to read from memory
 	icns_png_io_ref io_data = { dataPtr, dataSize, 0 };
-	png_set_read_fn(png_ptr, (void *)&io_data, &icns_png_read_memory); 
-	
+	png_set_read_fn(png_ptr, (void *)&io_data, &icns_png_read_memory);
+
 	png_read_info(png_ptr, info_ptr);
 	png_get_IHDR(png_ptr, info_ptr, &w, &h, &bit_depth, &color_type, NULL, NULL, NULL);
 
@@ -139,9 +139,9 @@ int icns_png_to_image(icns_size_t dataSize, icns_byte_t *dataPtr, icns_image_t *
 
 			break;
 	}
-	
+
 	png_read_update_info(png_ptr, info_ptr);
-	
+
 	rowsize = png_get_rowbytes(png_ptr, info_ptr);
 	rows = malloc (sizeof(png_bytep) * h);
 
@@ -157,7 +157,7 @@ int icns_png_to_image(icns_size_t dataSize, icns_byte_t *dataPtr, icns_image_t *
 		free(rows);
 		return ICNS_STATUS_NO_MEMORY;
 	}
-	
+
 	rows[0] = imageOut->imageData;
 	for (row = 1; row < h; row++) {
 		rows[row] = rows[row-1] + rowsize;
@@ -180,7 +180,7 @@ int icns_png_to_image(icns_size_t dataSize, icns_byte_t *dataPtr, icns_image_t *
 		printf("  decode failed.\n");
 	}
 	#endif
-	
+
 	return error;
 }
 
@@ -197,36 +197,36 @@ int icns_image_to_png(icns_image_t *image, icns_size_t *dataSizeOut, icns_byte_t
 	png_infop 		info_ptr;
 	png_bytep 		*row_pointers;
 	int			i, j;
-	
+
 	if(image == NULL)
 	{
 		icns_print_err("icns_image_to_png: Image is NULL!\n");
 		return ICNS_STATUS_NULL_PARAM;
 	}
-	
+
 	if(dataSizeOut == NULL)
 	{
 		icns_print_err("icns_image_to_png: Data size NULL!\n");
 		return ICNS_STATUS_NULL_PARAM;
 	}
-	
+
 	if(dataPtrOut == NULL)
 	{
 		icns_print_err("icns_image_to_png: Data ref is NULL!\n");
 		return ICNS_STATUS_NULL_PARAM;
 	}
-	
+
 	#ifdef ICNS_DEBUG
 	printf("Encoding PNG image...\n");
 	#endif
-	
+
 	width = image->imageWidth;
 	height = image->imageHeight;
 	image_channels = image->imageChannels;
 	image_pixel_depth = image->imagePixelDepth;
-	
+
 	png_ptr = png_create_write_struct (PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-	
+
 	if (png_ptr == NULL)
 	{
 		fprintf (stderr, "PNG error: cannot allocate libpng main struct\n");
@@ -244,18 +244,18 @@ int icns_image_to_png(icns_image_t *image, icns_size_t *dataSizeOut, icns_byte_t
 
   icns_png_io_ref io_data = { NULL, 0, 0 };
 	png_set_write_fn(png_ptr, (void *)&io_data, &icns_png_write_memory, NULL);
-	
+
 	png_set_filter(png_ptr, 0, PNG_FILTER_NONE);
-	
+
 	png_set_IHDR (png_ptr, info_ptr, width, height, image_pixel_depth, PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
-	
+
 	png_write_info (png_ptr, info_ptr);
-	
+
 	if(image_pixel_depth < 8)
 		png_set_packing (png_ptr);
-	
+
 	row_pointers = (png_bytep*)malloc(sizeof(png_bytep)*height);
-	
+
 	if (row_pointers == NULL)
 	{
 		fprintf (stderr, "PNG error: unable to allocate row_pointers\n");
@@ -272,7 +272,7 @@ int icns_image_to_png(icns_image_t *image, icns_size_t *dataSizeOut, icns_byte_t
 				free(row_pointers);
 				return ICNS_STATUS_NO_MEMORY;
 			}
-			
+
 			for(j = 0; j < width; j++)
 			{
 				icns_uint32_t *src_pixel = (icns_uint32_t*)&(image->imageData[i*width*image_channels+j*image_channels]);
@@ -281,16 +281,16 @@ int icns_image_to_png(icns_image_t *image, icns_size_t *dataSizeOut, icns_byte_t
 			}
 		}
 	}
-	
+
 	png_write_image (png_ptr,row_pointers);
-	
+
 	png_write_end (png_ptr, info_ptr);
-	
+
 	*dataSizeOut = io_data.offset;
 	*dataPtrOut = io_data.data;
-	
+
 	png_destroy_write_struct (&png_ptr, &info_ptr);
-	
+
 	for (j = 0; j < height; j++)
 		free(row_pointers[j]);
 	free(row_pointers);
