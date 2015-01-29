@@ -41,21 +41,21 @@ static void icns_png_read_memory(png_structp png_ptr, png_bytep data, png_size_t
 }
 
 static void icns_png_write_memory(png_structp png_ptr, png_bytep data, png_size_t length) {
-  icns_png_io_ref* _ref = (icns_png_io_ref*) png_get_io_ptr( png_ptr );
-  size_t nsize = _ref->offset + length;
+	icns_png_io_ref* _ref = (icns_png_io_ref*) png_get_io_ptr( png_ptr );
+	size_t nsize = _ref->offset + length;
 
-  /* allocate or grow buffer */
-  if(_ref->data)
-    _ref->data = realloc(_ref->data, nsize);
-  else
-    _ref->data = malloc(nsize);
+	/* allocate or grow buffer */
+	if(_ref->data)
+		_ref->data = realloc(_ref->data, nsize);
+	else
+		_ref->data = malloc(nsize);
 
-  if(_ref->data == NULL)
-    png_error(png_ptr, "Unable to allocate memory!");
+	if(_ref->data == NULL)
+		png_error(png_ptr, "Unable to allocate memory!");
 
-  /* copy new bytes to end of buffer */
-  memcpy(_ref->data + _ref->offset, data, length);
-  _ref->offset += length;
+	/* copy new bytes to end of buffer */
+	memcpy(_ref->data + _ref->offset, data, length);
+	_ref->offset += length;
 }
 
 int icns_png_to_image(icns_size_t dataSize, icns_byte_t *dataPtr, icns_image_t *imageOut)
@@ -103,8 +103,8 @@ int icns_png_to_image(icns_size_t dataSize, icns_byte_t *dataPtr, icns_image_t *
 	info_ptr = png_create_info_struct(png_ptr);
 
 	if(info_ptr == NULL) {
-	   png_destroy_read_struct(&png_ptr, NULL, NULL);
-	   return ICNS_STATUS_NO_MEMORY;
+		png_destroy_read_struct(&png_ptr, NULL, NULL);
+		return ICNS_STATUS_NO_MEMORY;
 	}
 
 	if (setjmp(png_jmpbuf(png_ptr)))
@@ -242,7 +242,7 @@ int icns_image_to_png(icns_image_t *image, icns_size_t *dataSizeOut, icns_byte_t
 		return ICNS_STATUS_NO_MEMORY;
 	}
 
-  icns_png_io_ref io_data = { NULL, 0, 0 };
+	icns_png_io_ref io_data = { NULL, 0, 0 };
 	png_set_write_fn(png_ptr, (void *)&io_data, &icns_png_write_memory, NULL);
 
 	png_set_filter(png_ptr, 0, PNG_FILTER_NONE);
