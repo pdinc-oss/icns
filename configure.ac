@@ -1,7 +1,7 @@
 #         -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.59)
-AC_INIT(libicns, 0.8.1, mathew@eisbox.net)
+AC_INIT(libicns, 0.8.1, http://sourceforge.net/p/icns/bugs/)
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([src/icns.h])
 AC_CONFIG_MACRO_DIR([m4])
