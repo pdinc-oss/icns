@@ -15,7 +15,7 @@ Library General Public License for more details.
 
 You should have received a copy of the GNU Library General Public
 License along with this library; if not, write to the
-Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 #include <stdio.h>
@@ -107,7 +107,7 @@ void decodeArchive(FILE *stream,char archiveTypeID)
 		for(s = 0; s < depth; s++)
 			spaces[s] = ' ';
 		spaces[depth] = 0;
-	
+
 		if( c == 0x84 ) {
 			if(markSet == 0) {
 				mark = 0;
@@ -152,10 +152,10 @@ void decodeArchive(FILE *stream,char archiveTypeID)
 				printf("%sUnknown Key (mark <= 1)\n",spaces);
 			}
 		}
-		
+
 		nextArrayKey = 0;
 		nextDataBuffer = 0;
-		
+
 		switch(c) {
 			case 0x00:
 				printf("%sPrevious data was Object/Class label\n",spaces);
@@ -270,9 +270,9 @@ void decodeArchive(FILE *stream,char archiveTypeID)
 				{
 					unsigned char	b[2] = {0,0};
 					unsigned long	skip = 0;
-					
+
 					fread ( &b[0], sizeof(char), 2, stream );
-					
+
 					if(archiveTypeID == ARCHIVE_TYPE_BE) {
 						skip = b[1]|b[0]<<8;
 					}
@@ -295,7 +295,7 @@ void decodeArchive(FILE *stream,char archiveTypeID)
 					int		idlen = 0;
 
 					fread ( &b[0], sizeof(char), 4, stream );
-					
+
 					if(archiveTypeID == ARCHIVE_TYPE_BE) {
 						skip = b[3]|b[2]<<8| b[1]<<16|b[0]<<24;
 					}
@@ -392,7 +392,7 @@ int main(int argc, char **argv)
 	char		archiveTypeID = ARCHIVE_TYPE_UNKNOWN;
 	unsigned char	archiveSysBytes[2] = {0,0};
 	unsigned short	archiveSystem = 0;
-	
+
 	printf("icontainer2icns, (C) 2005-2008 by Thomas Lübking & Mathew Eis\n\n");
 
 	if (argc < 2) {
@@ -410,7 +410,7 @@ int main(int argc, char **argv)
 	}
 
 	printf("Loading iContainer...\n");
-	
+
 	// Get the containter size
 	if(fseek(icontainer,0,SEEK_END) == 0)
 	{
@@ -423,7 +423,7 @@ int main(int argc, char **argv)
 		fclose(icontainer);
 		return -1;
 	}
-	
+
 	// Check the file size
 	if(containerSize < 16)
 	{
@@ -451,18 +451,18 @@ int main(int argc, char **argv)
 		archiveSystem = archiveSysBytes[1]|archiveSysBytes[0]<< 8;
 		printf("NSArchiver big endian archive, version %d, system %d\n",archiveVersion,archiveSystem);
 	}
-	
+
 	if(archiveVersion >= 5)
 		printf("Warning: Archive stream version higher then expected - proceeding anyway!");
-	
+
 	if(archiveFlags[0] != 0x0B)
 		printf("Warning: Byte 0  is 0x%02X (Expected 0x0B) - proceeding anyway!",archiveFlags[0]);
-	
+
 	if(archiveFlags[1] != 0x81)
 		printf("Warning: Byte 13  is 0x%02X (Expected 0x1) - proceeding anyway!",archiveFlags[1]);
 
 	decodeArchive(icontainer,archiveTypeID);
-	
+
 /*
 		char	buffer[118];
 		FILE	*icns = NULL;

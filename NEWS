@@ -15,12 +15,12 @@ Release 0.8.0  (01/20/2012)
 - added awareness of 'TOC ' type to libicns/icns2png
 - added support for PNG icns elements
 - added support for icon variant type
-- fix for alignment/bus errors on ARM/Sparc 
+- fix for alignment/bus errors on ARM/Sparc
 
 Release 0.7.1  (09/03/2009)
 # Sourceforge SVN rev 165 - 170
 - libicns version 2.7.1 (per libtool)
-- 
+-
 
 Release 0.7.0  (07/28/2009)
 # Sourceforge SVN rev 163 - 165

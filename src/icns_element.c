@@ -16,7 +16,7 @@ Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the
-Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
@@ -42,13 +42,13 @@ int icns_get_element_from_family(icns_family_t *iconFamily,icns_type_t iconType,
 	icns_type_t	elementType = ICNS_NULL_TYPE;
 	icns_size_t	elementSize = 0;
 	icns_uint32_t	dataOffset = 0;
-	
+
 	if(iconFamily == NULL)
 	{
 		icns_print_err("icns_get_element_from_family: icns family is NULL!\n");
 		return ICNS_STATUS_NULL_PARAM;
 	}
-	
+
 	if(iconElementOut == NULL)
 	{
 		icns_print_err("icns_get_element_in_family: icns element out is NULL!\n");
@@ -58,16 +58,16 @@ int icns_get_element_from_family(icns_family_t *iconFamily,icns_type_t iconType,
 	{
 		*iconElementOut = NULL;
 	}
-	
+
 	if(iconFamily->resourceType != ICNS_FAMILY_TYPE)
 	{
 		icns_print_err("icns_get_element_from_family: Invalid icns family!\n");
 		return ICNS_STATUS_INVALID_DATA;
 	}
-	
+
 	ICNS_READ_UNALIGNED(iconFamilyType, &(iconFamily->resourceType),sizeof( icns_type_t));
 	ICNS_READ_UNALIGNED(iconFamilySize, &(iconFamily->resourceSize),sizeof( icns_size_t));
-	
+
 	#ifdef ICNS_DEBUG
 	{
 		char typeStr[5];
@@ -76,22 +76,22 @@ int icns_get_element_from_family(icns_family_t *iconFamily,icns_type_t iconType,
 		printf("  icon family size check: %d\n",iconFamilySize);
 	}
 	#endif
-	
+
 	dataOffset = sizeof(icns_type_t) + sizeof(icns_size_t);
-	
+
 	while ( (foundData == 0) && (dataOffset < iconFamilySize) )
 	{
 		iconElement = ((icns_element_t*)(((icns_byte_t*)iconFamily)+dataOffset));
-		
+
 		if( iconFamilySize < (dataOffset+sizeof(icns_type_t)+sizeof(icns_size_t)) )
 		{
 			icns_print_err("icns_get_element_from_family: Corrupted icns family!\n");
-			return ICNS_STATUS_INVALID_DATA;		
+			return ICNS_STATUS_INVALID_DATA;
 		}
-		
+
 		ICNS_READ_UNALIGNED(elementType, &(iconElement->elementType),sizeof( icns_type_t));
 		ICNS_READ_UNALIGNED(elementSize, &(iconElement->elementSize),sizeof( icns_size_t));
-		
+
 		#ifdef ICNS_DEBUG
 		{
 			char typeStr[5];
@@ -100,19 +100,19 @@ int icns_get_element_from_family(icns_family_t *iconFamily,icns_type_t iconType,
 			printf("  size: %d\n",(int)elementSize);
 		}
 		#endif
-		
+
 		if( (elementSize < 8) || ((dataOffset+elementSize) > iconFamilySize) )
 		{
 			icns_print_err("icns_get_element_from_family: Invalid element size! (%d)\n",elementSize);
 			return ICNS_STATUS_INVALID_DATA;
 		}
-		
+
 		if(elementType == iconType)
 			foundData = 1;
 		else
 			dataOffset += elementSize;
 	}
-	
+
 	if(foundData)
 	{
 		*iconElementOut = malloc(elementSize);
@@ -128,7 +128,7 @@ int icns_get_element_from_family(icns_family_t *iconFamily,icns_type_t iconType,
 		icns_print_err("icns_get_element_from_family: Unable to find requested icon data!\n");
 		error = ICNS_STATUS_DATA_NOT_FOUND;
 	}
-	
+
 	return error;
 }
 
@@ -155,34 +155,34 @@ int icns_set_element_in_family(icns_family_t **iconFamilyRef,icns_element_t *new
 	icns_uint32_t	elementOrder = 0;
 	icns_uint32_t   newElementOrder = 0;
 
-	
+
 	if(iconFamilyRef == NULL)
 	{
 		icns_print_err("icns_set_element_in_family: icns family reference is NULL!\n");
 		return ICNS_STATUS_NULL_PARAM;
 	}
-	
+
 	iconFamily = *iconFamilyRef;
-	
+
 	if(iconFamily == NULL)
 	{
 		icns_print_err("icns_set_element_in_family: icns family is NULL!\n");
 		return ICNS_STATUS_NULL_PARAM;
 	}
-	
+
 	#ifdef ICNS_DEBUG
 	printf("Setting element in icon family...\n");
 	#endif
-	
+
 	if(iconFamily->resourceType != ICNS_FAMILY_TYPE)
 	{
 		icns_print_err("icns_set_element_in_family: Invalid icns family!\n");
 		error = ICNS_STATUS_INVALID_DATA;
 	}
-	
+
 	ICNS_READ_UNALIGNED(iconFamilyType, &(iconFamily->resourceType),sizeof( icns_type_t));
 	ICNS_READ_UNALIGNED(iconFamilySize, &(iconFamily->resourceSize),sizeof( icns_size_t));
-	
+
 	#ifdef ICNS_DEBUG
 	{
 		char typeStr[5];
@@ -190,17 +190,17 @@ int icns_set_element_in_family(icns_family_t **iconFamilyRef,icns_element_t *new
 		printf("  family size: %d (0x%08X)\n",(int)iconFamilySize,iconFamilySize);
 	}
 	#endif
-	
+
 	if(newIconElement == NULL)
 	{
 		icns_print_err("icns_set_element_in_family: icns element is NULL!\n");
 		return ICNS_STATUS_NULL_PARAM;
 	}
-	
-	// Retrieve first, then swap. May help with problems on some arch	
+
+	// Retrieve first, then swap. May help with problems on some arch
 	ICNS_READ_UNALIGNED(newElementType, &(newIconElement->elementType),sizeof( icns_type_t));
 	ICNS_READ_UNALIGNED(newElementSize, &(newIconElement->elementSize),sizeof( icns_size_t));
-	
+
 	#ifdef ICNS_DEBUG
 	{
 		char typeStr[5];
@@ -208,56 +208,56 @@ int icns_set_element_in_family(icns_family_t **iconFamilyRef,icns_element_t *new
 		printf("  element size: %d (0x%08X)\n",(int)newElementSize,newElementSize);
 	}
 	#endif
-	
+
 	dataOffset = sizeof(icns_type_t) + sizeof(icns_size_t);
-	
+
 	while ( (foundData == 0) && (dataOffset < iconFamilySize) )
 	{
 		iconElement = ((icns_element_t*)(((char*)iconFamily)+dataOffset));
 		ICNS_READ_UNALIGNED(elementType, &(iconElement->elementType),sizeof( icns_type_t));
 		ICNS_READ_UNALIGNED(elementSize, &(iconElement->elementSize),sizeof( icns_size_t));
-		
+
 		if(elementType == newElementType)
 			foundData = 1;
 		else
 			dataOffset += elementSize;
 	}
-	
+
 	if(foundData)
 		newIconFamilySize = iconFamilySize - elementSize + newElementSize;
 	else
 		newIconFamilySize = iconFamilySize + newElementSize;
-	
+
 	#ifdef ICNS_DEBUG
 	printf("  new family type 'icns'\n");
 	printf("  new family size: %d (0x%08X)\n",(int)newIconFamilySize,newIconFamilySize);
 	#endif
-	
+
 	newIconFamily = malloc(newIconFamilySize);
-	
+
 	if(newIconFamily == NULL)
 	{
 		icns_print_err("icns_set_element_in_family: Unable to allocate memory block of size: %d!\n",newIconFamilySize);
 		return ICNS_STATUS_NO_MEMORY;
 	}
-	
+
 	newIconFamily->resourceType = ICNS_FAMILY_TYPE;
 	newIconFamily->resourceSize = newIconFamilySize;
-	
+
 	newDataOffset = sizeof(icns_type_t) + sizeof(icns_size_t);
 	dataOffset = sizeof(icns_type_t) + sizeof(icns_size_t);
-	
+
 	copiedData = 0;
-	
+
 	newElementOrder = icns_get_element_order(newElementType);
-	
+
 	while ( dataOffset < iconFamilySize )
 	{
 		iconElement = ((icns_element_t*)(((char*)iconFamily)+dataOffset));
 		ICNS_READ_UNALIGNED(elementType, &(iconElement->elementType),sizeof( icns_type_t));
 		ICNS_READ_UNALIGNED(elementSize, &(iconElement->elementSize),sizeof( icns_size_t));
 		elementOrder = icns_get_element_order(elementType);
-		
+
 		if(!copiedData && (elementType == newElementType))
 		{
 			memcpy( ((char *)(newIconFamily))+newDataOffset , (char *)newIconElement, newElementSize);
@@ -269,7 +269,7 @@ int icns_set_element_in_family(icns_family_t **iconFamilyRef,icns_element_t *new
 			memcpy( ((char *)(newIconFamily))+newDataOffset , (char *)newIconElement, newElementSize);
 			newDataOffset += newElementSize;
 			copiedData = 1;
-			
+
 			memcpy( ((char *)(newIconFamily))+newDataOffset , ((char *)(iconFamily))+dataOffset, elementSize);
 			newDataOffset += elementSize;
 		}
@@ -278,20 +278,20 @@ int icns_set_element_in_family(icns_family_t **iconFamilyRef,icns_element_t *new
 			memcpy( ((char *)(newIconFamily))+newDataOffset , ((char *)(iconFamily))+dataOffset, elementSize);
 			newDataOffset += elementSize;
 		}
-		
+
 		dataOffset += elementSize;
 	}
-	
+
 	if(!copiedData)
 	{
 		memcpy( ((char *)(newIconFamily))+newDataOffset , (char *)newIconElement, newElementSize);
 		newDataOffset += newElementSize;
 	}
-	
+
 	*iconFamilyRef = newIconFamily;
-	
+
 	free(iconFamily);
-	
+
 	return error;
 }
 
@@ -306,13 +306,13 @@ int icns_add_element_in_family(icns_family_t **iconFamilyRef,icns_element_t *new
 		icns_print_err("icns_add_element_in_family: icns family reference is NULL!\n");
 		return ICNS_STATUS_NULL_PARAM;
 	}
-	
+
 	if(newIconElement == NULL)
 	{
 		icns_print_err("icns_add_element_in_family: icon element is NULL!\n");
 		return ICNS_STATUS_NULL_PARAM;
 	}
-	
+
 	return icns_set_element_in_family(iconFamilyRef,newIconElement);
 }
 
@@ -330,88 +330,88 @@ int icns_remove_element_in_family(icns_family_t **iconFamilyRef,icns_type_t icon
 	icns_type_t	elementType = ICNS_NULL_TYPE;
 	icns_size_t	elementSize = 0;
 	icns_uint32_t	dataOffset = 0;
-	
+
 	if(iconFamilyRef == NULL)
 	{
 		icns_print_err("icns_remove_element_in_family: icon family reference is NULL!\n");
 		return ICNS_STATUS_NULL_PARAM;
 	}
-	
+
 	iconFamily = *iconFamilyRef;
-	
+
 	if(iconFamily == NULL)
 	{
 		icns_print_err("icns_remove_element_in_family: icon family is NULL!\n");
 		return ICNS_STATUS_NULL_PARAM;
 	}
-	
+
 	if(iconFamily->resourceType != ICNS_FAMILY_TYPE)
 	{
 		icns_print_err("icns_remove_element_in_family: Invalid icon family!\n");
 		error = ICNS_STATUS_INVALID_DATA;
 	}
-	
+
 	ICNS_READ_UNALIGNED(iconFamilyType, &(iconFamily->resourceType),sizeof( icns_type_t));
 	ICNS_READ_UNALIGNED(iconFamilySize, &(iconFamily->resourceSize),sizeof( icns_size_t));
-	
+
 	dataOffset = sizeof(icns_type_t) + sizeof(icns_size_t);
-	
+
 	while ( (foundData == 0) && (dataOffset < iconFamilySize) )
 	{
 		iconElement = ((icns_element_t*)(((char*)iconFamily)+dataOffset));
 		ICNS_READ_UNALIGNED(elementType, &(iconElement->elementType),sizeof( icns_type_t));
 		ICNS_READ_UNALIGNED(elementSize, &(iconElement->elementSize),sizeof( icns_size_t));
-		
+
 		if(elementType == iconElementType)
 			foundData = 1;
 		else
 			dataOffset += elementSize;
 	}
-	
+
 	if(!foundData)
 	{
 		icns_print_err("icns_remove_element_in_family: Unable to find requested icon data for removal!\n");
 		return ICNS_STATUS_DATA_NOT_FOUND;
 	}
-	
+
 	icns_size_t	newIconFamilySize = 0;
 	icns_family_t	*newIconFamily = NULL;
 	icns_uint32_t	newDataOffset = 0;
-	
+
 	newIconFamilySize = iconFamilySize - elementSize;
 	newIconFamily = malloc(newIconFamilySize);
-	
+
 	if(newIconFamily == NULL)
 	{
 		icns_print_err("icns_remove_element_in_family: Unable to allocate memory block of size: %d!\n",newIconFamilySize);
 		return ICNS_STATUS_NO_MEMORY;
 	}
-	
+
 	newIconFamily->resourceType = ICNS_FAMILY_TYPE;
 	newIconFamily->resourceSize = newIconFamilySize;
-	
+
 	newDataOffset = sizeof(icns_type_t) + sizeof(icns_size_t);
 	dataOffset = sizeof(icns_type_t) + sizeof(icns_size_t);
-	
+
 	while ( dataOffset < iconFamilySize )
 	{
 		iconElement = ((icns_element_t*)(((char*)iconFamily)+dataOffset));
 		ICNS_READ_UNALIGNED(elementType, &(iconElement->elementType),sizeof( icns_type_t));
 		ICNS_READ_UNALIGNED(elementSize, &(iconElement->elementSize),sizeof( icns_size_t));
-		
+
 		if(elementType != iconElementType)
 		{
 			memcpy( ((char *)(newIconFamily))+newDataOffset , ((char *)(iconFamily))+dataOffset, elementSize);
 			newDataOffset += elementSize;
 		}
-		
+
 		dataOffset += elementSize;
 	}
-	
+
 	*iconFamilyRef = newIconFamily;
 
 	free(iconFamily);
-	
+
 	return error;
 }
 
@@ -438,7 +438,7 @@ int icns_new_element_from_image_or_mask(icns_image_t *imageIn,icns_type_t iconTy
 {
 	icns_element_t	*newElement = NULL;
 	icns_size_t	newElementSize = 0;
-	
+
 	if(iconElementOut == NULL)
 	{
 		icns_print_err("icns_new_element_with_image_or_mask: Icon element reference is NULL!\n");
@@ -448,7 +448,7 @@ int icns_new_element_from_image_or_mask(icns_image_t *imageIn,icns_type_t iconTy
 	{
 		*iconElementOut = NULL;
 	}
-	
+
 	newElementSize = sizeof(icns_type_t) + sizeof(icns_size_t);
 	newElement = (icns_element_t *)malloc(newElementSize);
 	if(newElement == NULL)
@@ -456,11 +456,11 @@ int icns_new_element_from_image_or_mask(icns_image_t *imageIn,icns_type_t iconTy
 		icns_print_err("icns_new_element_with_image_or_mask: Unable to allocate memory block of size: %d!\n",(int)newElementSize);
 		return ICNS_STATUS_NO_MEMORY;
 	}
-	
+
 	newElement->elementType = iconType;
 	newElement->elementSize = newElementSize;
 	*iconElementOut = newElement;
-	
+
 	return icns_update_element_with_image_or_mask(imageIn,isMask,iconElementOut);
 }
 
@@ -485,83 +485,83 @@ int icns_update_element_with_image_or_mask(icns_image_t *imageIn,icns_bool_t isM
 	int		        error = ICNS_STATUS_OK;
 	icns_type_t             iconType;
 	icns_icon_info_t 	iconInfo;
-	
+
 	if(imageIn == NULL)
 	{
 		icns_print_err("icns_update_element_with_image_or_mask: Icon image is NULL!\n");
 		return ICNS_STATUS_NULL_PARAM;
 	}
-	
+
 	if(iconElement == NULL)
 	{
 		icns_print_err("icns_update_element_with_image_or_mask: Icon element reference is NULL!\n");
 		return ICNS_STATUS_NULL_PARAM;
 	}
-	
+
 	if(*iconElement == NULL)
 	{
 		icns_print_err("icns_update_element_with_image_or_mask: Icon element is NULL!\n");
 		return ICNS_STATUS_NULL_PARAM;
 	}
-	
+
 	iconType = (*iconElement)->elementType;
-	
+
 	if(iconType == ICNS_NULL_DATA) {
 		icns_print_err("icns_update_element_with_image_or_mask: Invalid icon type!\n");
 		return ICNS_STATUS_INVALID_DATA;
 	}
-	
+
 	// Determine what the height and width ought to be, to check the incoming image
 	iconInfo = icns_get_image_info_for_type(iconType);
-	
+
 	// Check the image width, height, and pixel depth
-	
+
 	if(imageIn->imageWidth != iconInfo.iconWidth)
 	{
 		icns_print_err("icns_update_element_with_image_or_mask: Invalid input image width: %d\n",imageIn->imageWidth);
 		return ICNS_STATUS_INVALID_DATA;
 	}
-	
+
 	if(imageIn->imageWidth != iconInfo.iconWidth)
 	{
 		icns_print_err("icns_update_element_with_image_or_mask: Invalid input image width: %d\n",imageIn->imageWidth);
 		return ICNS_STATUS_INVALID_DATA;
 	}
-	
+
 	if(imageIn->imageHeight != iconInfo.iconHeight)
 	{
 		icns_print_err("icns_update_element_with_image_or_mask: Invalid input image height: %d\n",imageIn->imageHeight);
 		return ICNS_STATUS_INVALID_DATA;
 	}
-	
+
 	if(imageIn->imagePixelDepth != (iconInfo.iconBitDepth/iconInfo.iconChannels))
 	{
 		icns_print_err("icns_update_element_with_image_or_mask: libicns does't support bit depth conversion yet.\n");
 		return ICNS_STATUS_INVALID_DATA;
 	}
-	
+
 	// Check the image data size and data pointer
-	
+
 	if(imageIn->imageDataSize == 0)
 	{
 		icns_print_err("icns_update_element_with_image_or_mask: Invalid input image data size: %d\n",(int)imageIn->imageDataSize);
 		return ICNS_STATUS_INVALID_DATA;
 	}
-	
+
 	if(imageIn->imageData == NULL)
 	{
 		icns_print_err("icns_update_element_with_image_or_mask: Invalid input image data\n");
 		return ICNS_STATUS_INVALID_DATA;
 	}
-	
+
 	// Finally, done with all the preliminary checks
 	icns_size_t	imageDataSize = 0;
 	icns_byte_t	*imageDataPtr = NULL;
-	
+
 	// For use to easily track deallocation if we use rle24, or jp2
 	icns_size_t	newDataSize = 0;
 	icns_byte_t	*newDataPtr = NULL;
-	
+
 	switch(iconType)
 	{
 	case ICNS_512x512_2X_32BIT_ARGB_DATA:
@@ -582,14 +582,14 @@ int icns_update_element_with_image_or_mask(icns_image_t *imageIn,icns_bool_t isM
 	case ICNS_32x32_32BIT_DATA:
 	case ICNS_16x16_32BIT_DATA:
 		newDataSize = imageIn->imageDataSize;
-		
+
 		// Note: icns_encode_rle24_data allocates memory that must be freed later
 		if( (error = icns_encode_rle24_data(imageIn->imageDataSize,imageIn->imageData,&newDataSize,&newDataPtr)) )
 		{
 			icns_print_err("icns_update_element_with_image_or_mask: Error rle encoding image data.\n");
 			error = ICNS_STATUS_INVALID_DATA;
 		}
-		
+
 		imageDataSize = newDataSize;
 		imageDataPtr = newDataPtr;
 		break;
@@ -603,13 +603,13 @@ int icns_update_element_with_image_or_mask(icns_image_t *imageIn,icns_bool_t isM
 			icns_byte_t	*existingData = NULL;
 			icns_size_t	existingDataSize = 0;
 			icns_size_t	existingDataOffset = 0;
-			
+
 			if(imageIn->imageDataSize != iconInfo.iconRawDataSize)
 			{
 				icns_print_err("icns_update_element_with_image_or_mask: Invalid input image data size: %d!\n",imageIn->imageDataSize);
 				return ICNS_STATUS_INVALID_DATA;
 			}
-			
+
 			newDataSize = iconInfo.iconRawDataSize * 2;
 			newDataPtr = (icns_byte_t *)malloc(newDataSize);
 			if(newDataPtr == NULL)
@@ -618,13 +618,13 @@ int icns_update_element_with_image_or_mask(icns_image_t *imageIn,icns_bool_t isM
 				error = ICNS_STATUS_NO_MEMORY;
 				goto exception;
 			}
-			
+
 			memset (newDataPtr,0,newDataSize);
-			
+
 			existingData = (icns_byte_t*)(*iconElement);
 			existingDataOffset = sizeof(icns_type_t) + sizeof(icns_size_t);
 			existingDataSize = (*iconElement)->elementSize - existingDataOffset;
-			
+
 			// No icon data
 			if(existingDataSize == 0)
 			{
@@ -661,7 +661,7 @@ int icns_update_element_with_image_or_mask(icns_image_t *imageIn,icns_bool_t isM
 				error = ICNS_STATUS_INVALID_DATA;
 				goto exception;
 			}
-			
+
 			imageDataSize = newDataSize;
 			imageDataPtr = newDataPtr;
 		}
@@ -671,21 +671,21 @@ int icns_update_element_with_image_or_mask(icns_image_t *imageIn,icns_bool_t isM
 		imageDataPtr = imageIn->imageData;
 		break;
 	}
-	
+
 	if(error == ICNS_STATUS_OK)
 	{
 		icns_element_t	*newElement = NULL;
 		icns_size_t	newElementSize = 0;
 		icns_type_t	newElementType = ICNS_NULL_DATA;
 		icns_size_t	newElementHeaderSize = 0;
-		
+
 		if(imageDataSize == 0)
 		{
 			icns_print_err("icns_update_element_with_image_or_mask: Image data size should not be 0!\n");
 			error = ICNS_STATUS_INVALID_DATA;
 			goto exception;
 		}
-		
+
 		if(imageDataPtr == NULL)
 		{
 			icns_print_err("icns_update_element_with_image_or_mask: Image data should not be NULL!\n");
@@ -697,20 +697,20 @@ int icns_update_element_with_image_or_mask(icns_image_t *imageIn,icns_bool_t isM
 		newElementHeaderSize = sizeof(icns_type_t) + sizeof(icns_size_t);
 		newElementSize = newElementHeaderSize + imageDataSize;
 		newElementType = iconType;
-		
+
 		newElement = (icns_element_t *)malloc(newElementSize);
-		
+
 		if(newElement == NULL)
 		{
 			icns_print_err("icns_update_element_with_image_or_mask: Unable to allocate memory block of size: %d!\n",(int)newElementSize);
 			error = ICNS_STATUS_NO_MEMORY;
 			goto exception;
 		}
-		
+
 		// Set up the element info
 		newElement->elementType = newElementType;
 		newElement->elementSize = newElementSize;
-		
+
 		#ifdef ICNS_DEBUG
 		{
 			char typeStr[5];
@@ -718,27 +718,27 @@ int icns_update_element_with_image_or_mask(icns_image_t *imageIn,icns_bool_t isM
 			printf("  type: '%s'\n",icns_type_str(newElementType,typeStr));
 			printf("  size: %d\n",(int)newElementSize);
 		}
-		#endif		
-		
+		#endif
+
 		// Copy in the image data
 		memcpy(newElement->elementData,imageDataPtr,imageDataSize);
-		
+
 		// Free the old element...
 		if(*iconElement != NULL)
 			free(*iconElement);
-		
+
 		// and move the pointer to the new element
 		*iconElement = newElement;
 	}
-	
+
 exception:
-	
+
 	// We might have allocated new memory earlier...
 	if(newDataPtr != NULL)
 	{
 		free(newDataPtr);
 		newDataPtr = NULL;
 	}
-	
+
 	return error;
 }

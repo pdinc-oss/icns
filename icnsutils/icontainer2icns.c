@@ -14,7 +14,7 @@ Library General Public License for more details.
 
 You should have received a copy of the GNU Library General Public
 License along with this library; if not, write to the
-Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 #include <stdio.h>
@@ -51,7 +51,7 @@ int main(int argc, char **argv)
    FILE *icontainer = NULL;
    FILE *icns = NULL;
    short i = 0;
-   
+
    //int iconCounter = 0;
    int c;
    char name[256];
@@ -60,9 +60,9 @@ int main(int argc, char **argv)
       printf("error while opening file %s\n",argv[1]);
       return -1;
    }
-   
+
    rewind(icontainer);
-   
+
    while ((c = getc(icontainer)) != EOF) {
       if (c != 'i') {
          buffer[i] = (char)(c & 0xff);
@@ -96,14 +96,14 @@ int main(int argc, char **argv)
             }
             name[k++] = '.'; name[k++] = 'i'; name[k++] = 'c';
             name[k++] = 'n'; name[k++] = 's'; name[k] = '\0';
-            
+
 //             printf("%s\n",name);
-                  
+
             if( (icns = fopen(name, "w")) == NULL ) {
                printf("error while opening icns file %s\n", name);
                return -1;
             }
-            
+
             rewind(icns);
             // write header
             fputc('i', icns); fputc('c', icns);

@@ -14,7 +14,7 @@ Library General Public License for more details.
 
 You should have received a copy of the GNU Library General Public
 License along with this library; if not, write to the
-Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
@@ -77,17 +77,17 @@ int ParseSize(char *size)
 {
 	int i;
 	int value = -1;
-	
+
 	if(size == NULL)
 		return -1;
-	
+
 	for(i = 0; i < ARRAY_SIZE(sizeStrs); i++) {
 		if(strcmp(sizeStrs[i], size) == 0) {
 			value = sizeVals[i];
 			break;
 		}
 	}
-	
+
 	return value;
 }
 
@@ -95,17 +95,17 @@ int ParseDepth(char *depth)
 {
 	int i;
 	int value = -1;
-	
+
 	if(depth == NULL)
 		return -1;
-	
+
 	for(i = 0; i < ARRAY_SIZE(depthStrs); i++) {
 		if(strcmp(depthStrs[i], depth) == 0) {
 			value = depthVals[i];
 			break;
 		}
 	}
-	
+
 	return value;
 }
 
@@ -216,10 +216,10 @@ int ParseOptions(int argc, char** argv)
 		PrintUsage();
 		return CONVERSION_INVALID;
 	}
-	
+
 	argc -= optind;
 	argv += optind;
-	
+
 	while (argc) {
 		if(fileCount >= MAX_INPUTFILES) {
 			fprintf(stderr, "No more files can be added\n");
@@ -235,7 +235,7 @@ int ParseOptions(int argc, char** argv)
 		argc--;
 		argv++;
 	}
-	
+
 	return CONVERSION_SUCCESS;
 }
 
@@ -244,20 +244,20 @@ int main(int argc, char *argv[])
 {
 	int result = CONVERSION_SUCCESS;
 	int count = 0;
-	
+
 	// Initialize the globals;
 	extractIconSize = ALL_SIZES;
 	extractIconDepth = ALL_DEPTHS;
 	extractMode = 0; // Do nothing
-	
+
 	// error messages handled by ParseOptions
     result = ParseOptions(argc, argv);
 	if(result != CONVERSION_SUCCESS)
 		return result;
-	
+
 	// display any exceptions thrown by libicns
 	icns_set_print_errors(PRINT_ICNS_ERRORS);
-	
+
 	for(count = 0; count < fileCount; count++)
 	{
         int convresult = ExtractAndDescribeIconFamilyFile(inputFileNames[count]);
@@ -267,7 +267,7 @@ int main(int argc, char *argv[])
                 result = CONVERSION_FAILURE;
         }
 	}
-	
+
 	for(count = 0; count < fileCount; count++)
 		if(inputFileNames[count] != NULL)
 			free(inputFileNames[count]);
@@ -286,25 +286,25 @@ int ExtractAndDescribeIconFamilyFile(char *filepath)
 	unsigned int  filenamestart = 0;
 	char          *outfileprefix = NULL;
 	unsigned int  outfileprefixlength = 0;
-	
+
 	#ifdef __APPLE__
 	char          *rsrcfilepath = NULL;
 	unsigned int  rsrcfilepathlength = 0;
 	#endif
-	
+
 	filepathlength = strlen(filepath);
-	
+
 	#ifdef __APPLE__
 	rsrcfilepathlength = filepathlength + 17;
 	rsrcfilepath = (char *)malloc(rsrcfilepathlength);
 	if(rsrcfilepath == NULL)
 		return ICNS_STATUS_NO_MEMORY;
-	
+
 	// Append the OS X POSIX-safe filepath to access the resource fork
 	strncpy(&rsrcfilepath[0],&filepath[0],filepathlength);
 	strncpy(&rsrcfilepath[filepathlength],"/..namedfork/rsrc",17);
 	#endif
-	
+
 	// Get the plain filename...
 	filename = (char *)malloc(filepathlength + 1);
 	filenamestart = filepathlength-1;
@@ -316,14 +316,14 @@ int ExtractAndDescribeIconFamilyFile(char *filepath)
 	filenamelength = filepathlength-filenamestart;
 	memcpy(&filename[0],&filepath[filenamestart],filenamelength);
 	filename[filenamelength] = 0;
-	
+
 	// Set up the output filepath...
 	unsigned int	outputpathlength = 0;
 	unsigned int	filepathstart = filepathlength;
 	unsigned int	filepathend = filepathlength;
 
 	if(outputPath != NULL)
-	{	
+	{
 		outputpathlength = strlen(outputPath);
 
 		// Create a buffer large enough to hold the worst case
@@ -333,7 +333,7 @@ int ExtractAndDescribeIconFamilyFile(char *filepath)
 			error = ICNS_STATUS_NO_MEMORY;
 			goto cleanup;
 		}
-		
+
 		// Copy in the output path
 		strncpy(&outfileprefix[0],&outputPath[0],outputpathlength);
 		outfileprefixlength = outputpathlength;
@@ -343,7 +343,7 @@ int ExtractAndDescribeIconFamilyFile(char *filepath)
 			outfileprefixlength++;
 			outfileprefix[outfileprefixlength] = 0;
 		}
-		
+
 		// Append the output filepath
 		// That is, the input filepath from the last '/' or start to the last '.' past the last '/'
 		while(filepath[filepathstart] != '/' && filepathstart > 0)
@@ -379,19 +379,19 @@ int ExtractAndDescribeIconFamilyFile(char *filepath)
 		outfileprefixlength += (filepathend - filepathstart);
 		outfileprefix[outfileprefixlength] = 0;
 	}
-	
+
 	printf("----------------------------------------------------\n");
 	printf("Reading icns family from %s...\n",filepath);
-	
+
 	#ifdef __APPLE__
 	// If we're on an apple system, we want to try
 	// reading the resource fork first...
-	
+
 	// hide all internal errors while we try to read the resource fork
 	icns_set_print_errors(0);
 
 	inFile = fopen( rsrcfilepath, "r" );
-	
+
 	if ( inFile != NULL ) {
 		error = icns_read_family_from_rsrc(inFile,&iconFamily);
 		if(error == ICNS_STATUS_OK)
@@ -401,51 +401,51 @@ int ExtractAndDescribeIconFamilyFile(char *filepath)
 	} else {
 		error = ICNS_STATUS_IO_READ_ERR;
 	}
-	
+
 	// Turn them back on if we wanted them
 	icns_set_print_errors(PRINT_ICNS_ERRORS);
-	
+
 	// If we had an error, it was from trying to read the resource fork, so try the data file
 	if(error != ICNS_STATUS_OK)
 	{
 		inFile = fopen( filepath, "r" );
-		
+
 		if ( inFile == NULL ) {
 			fprintf (stderr, "Unable to open file %s!\n",filepath);
 			goto cleanup;
 		}
 
 		error = icns_read_family_from_file(inFile,&iconFamily);
-		
+
 		fclose(inFile);
 	}
-	
+
 	#else
 	// On all other systems, read just the file
 
 	inFile = fopen( filepath, "r" );
-	
+
 	if ( inFile == NULL ) {
 		fprintf (stderr, "Unable to open file %s!\n",filepath);
 		goto cleanup;
 	}
 
 	error = icns_read_family_from_file(inFile,&iconFamily);
-		
+
 	fclose(inFile);
 
 	#endif
-			
+
 	if(error) {
 		fprintf (stderr, "Unable to read icns family from file %s!\n",filepath);
 		goto cleanup;
 	}
-	
+
 	error = ExtractAndDescribeIconFamily(iconFamily,filename,outfileprefix);
 
 cleanup:
-	
-	
+
+
 	#ifdef __APPLE__
 	if(rsrcfilepath != NULL) {
 		free(rsrcfilepath);
@@ -465,7 +465,7 @@ cleanup:
 		filename = NULL;
 	}
 
-	
+
 	return error;
 }
 
@@ -477,30 +477,30 @@ int ExtractAndDescribeIconFamily(icns_family_t *iconFamily,char *description,cha
 	int           elementCount = 0;
 	int           extractedCount = 0;
 	char           *outfilepath = NULL;
-	
+
 	printf(" Extracting icons from %s...\n",description);
-	
+
 	// Create a buffer for the output filename
 	if(extractMode & EXTRACT_MODE) {
 		outfilepath = (char *)malloc(strlen(outfileprefix)+25);
 		if(outfilepath == NULL)
 			return ICNS_STATUS_NO_MEMORY;
 	}
-	
+
 	// Start listing info:
 	if(extractMode & LIST_MODE) {
 		char typeStr[5];
 		icns_type_str(iconFamily->resourceType,typeStr);
 		printf(" Icon family size is %d bytes (including %d byte header)\n",iconFamily->resourceSize,8);
 	}
-	
+
 	// Skip past the icns header
 	dataOffset = sizeof(icns_type_t) + sizeof(icns_size_t);
 	dataPtr = (icns_byte_t *)iconFamily;
-	
+
 	if(extractMode & LIST_MODE)
 		printf(" Listing icon elements...\n");
-	
+
     // Loop through and convert each icon
 	while(((dataOffset+8) < iconFamily->resourceSize) && (error == 0 || error == ICNS_STATUS_UNSUPPORTED))
 	{
@@ -509,16 +509,16 @@ int ExtractAndDescribeIconFamily(icns_family_t *iconFamily,char *description,cha
 		icns_size_t      iconDataSize;
 		icns_size_t      iconDimSize = 0;
 		char	         typeStr[5];
-		
+
 		memcpy(&iconElement,(dataPtr+dataOffset),8);
-		
+
 		icns_type_str(iconElement.elementType,typeStr);
 		iconDataSize = iconElement.elementSize - 8;
-		
+
 		if(extractMode & LIST_MODE) {
 			printf("  '%s'",typeStr);
 		}
-		
+
 		switch(iconElement.elementType) {
 			case ICNS_TABLE_OF_CONTENTS:
 			{
@@ -559,7 +559,7 @@ int ExtractAndDescribeIconFamily(icns_family_t *iconFamily,char *description,cha
 				b[2] = iconElement.elementSize >> 8;
 				b[3] = iconElement.elementSize;
 				memcpy(&variantData[4], &b[0], sizeof(icns_size_t));
-				
+
 				// Display some info about the variant
 				switch(iconElement.elementType) {
 					case ICNS_TILE_VARIANT:
@@ -586,7 +586,7 @@ int ExtractAndDescribeIconFamily(icns_family_t *iconFamily,char *description,cha
 
 				// Try to parse out the variant
 				error = icns_import_family_data(iconElement.elementSize,variantData,&variant);
-				
+
 				if(error) {
 					fprintf (stderr, "Unable to read icon variant type '%s' (error while parsing)\n",typeStr);
 				} else {
@@ -599,9 +599,9 @@ int ExtractAndDescribeIconFamily(icns_family_t *iconFamily,char *description,cha
 						free(variantPrefix);
 					}
 				}
-				
+
 				free(variant);
-				
+
 				if(variantData) {
 					free(variantData);
 					variantData = NULL;
@@ -611,7 +611,7 @@ int ExtractAndDescribeIconFamily(icns_family_t *iconFamily,char *description,cha
 			default:
             {
 				iconInfo = icns_get_image_info_for_type(iconElement.elementType);
-				
+
 				if(iconInfo.iconWidth == iconInfo.iconHeight) {
 					iconDimSize = iconInfo.iconWidth;
 				} else if(iconElement.elementType == ICNS_16x12_8BIT_DATA) {
@@ -625,10 +625,10 @@ int ExtractAndDescribeIconFamily(icns_family_t *iconFamily,char *description,cha
 				} else {
 					iconDimSize = -1;
 				}
-                
+
                 if(iconInfo.isImage)
                     imageCount++;
-				
+
 				if(extractMode & LIST_MODE)
 				{
 					// size
@@ -648,7 +648,7 @@ int ExtractAndDescribeIconFamily(icns_family_t *iconFamily,char *description,cha
 					}
 					printf("\n");
 				}
-				
+
 				if(extractMode & EXTRACT_MODE)
 				{
 				if(extractIconSize == ALL_SIZES || extractIconSize == iconDimSize)
@@ -660,11 +660,11 @@ int ExtractAndDescribeIconFamily(icns_family_t *iconFamily,char *description,cha
 					unsigned int	outfilepathlength = 0;
 					FILE 		*outfile = NULL;
 					icns_image_t	iconImage;
-					
+
 					memset ( &iconImage, 0, sizeof(icns_image_t) );
-					
+
 					error = icns_get_image32_with_mask_from_family(iconFamily,iconElement.elementType,&iconImage);
-                    
+
                     if(error == ICNS_STATUS_UNSUPPORTED)
                     {
                         printf("  Unable to convert '%s' element! (Unsupported by this version of libicns)\n",typeStr);
@@ -678,7 +678,7 @@ int ExtractAndDescribeIconFamily(icns_family_t *iconFamily,char *description,cha
 						// Set up the output file name: description_WWxHHxDD.png
 						outfilepathlength = sprintf(&outfilepath[0],"%s_%dx%dx%d.png",outfileprefix,iconInfo.iconWidth,iconInfo.iconHeight,iconInfo.iconBitDepth);
 						outfilepath[outfilepathlength] = 0;
-						
+
 						outfile = fopen(outfilepath,"w");
 						if(!outfile)
 						{
@@ -687,21 +687,21 @@ int ExtractAndDescribeIconFamily(icns_family_t *iconFamily,char *description,cha
 						else
 						{
 							error = WritePNGImage(outfile,&iconImage,NULL);
-							
+
 							if(error) {
 								fprintf (stderr, "Error writing PNG image!\n");
 							} else {
 								printf("  Saved '%s' element to %s.\n",typeStr,outfilepath);
 							}
-							
+
 							if(outfile != NULL) {
 								fclose(outfile);
 								outfile = NULL;
 							}
 						}
-						
+
 						extractedCount++;
-						
+
 						icns_free_image(&iconImage);
 					}
 				}
@@ -711,12 +711,12 @@ int ExtractAndDescribeIconFamily(icns_family_t *iconFamily,char *description,cha
             }
             break;
 		}
-		
+
 		// Move on to the next element
 		dataOffset += iconElement.elementSize;
 		elementCount++;
 	}
-	
+
 	if(extractMode & LIST_MODE)
 	{
 		if(elementCount > 0) {
@@ -725,7 +725,7 @@ int ExtractAndDescribeIconFamily(icns_family_t *iconFamily,char *description,cha
 			printf("No elements found in %s.\n",description);
 		}
 	}
-	
+
 	if(extractMode & EXTRACT_MODE)
 	{
 		if(extractedCount > 0) {
@@ -736,14 +736,14 @@ int ExtractAndDescribeIconFamily(icns_family_t *iconFamily,char *description,cha
             }
 		} else {
 			printf("No elements were extracted from %s.\n",description);
-		}		
+		}
 	}
-	
+
 	if(outfilepath != NULL) {
 		free(outfilepath);
 		outfilepath = NULL;
 	}
-	
+
 	return error;
 }
 
@@ -761,31 +761,31 @@ int	WritePNGImage(FILE *outputfile,icns_image_t *image,icns_image_t *mask)
 	png_infop 		info_ptr;
 	png_bytep 		*row_pointers;
 	int			i, j;
-	
+
 	if (image == NULL)
 	{
 		fprintf (stderr, "icns image NULL!\n");
 		return -1;
 	}
-	
+
 	width = image->imageWidth;
 	height = image->imageHeight;
 	image_channels = image->imageChannels;
 	image_pixel_depth = image->imagePixelDepth;
-	
+
 	/*
 	printf("width: %d\n",width);
 	printf("height: %d\n",height);
 	printf("image_channels: %d\n",image_channels);
 	printf("image_pixel_depth: %d\n",image_pixel_depth);
 	*/
-	
+
 	if(mask != NULL) {
 		mask_channels = mask->imageChannels;
 	}
-	
+
 	png_ptr = png_create_write_struct (PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-	
+
 	if (png_ptr == NULL)
 	{
 		fprintf (stderr, "PNG error: cannot allocate libpng main struct\n");
@@ -804,16 +804,16 @@ int	WritePNGImage(FILE *outputfile,icns_image_t *image,icns_image_t *mask)
 	png_init_io(png_ptr, outputfile);
 
 	png_set_filter(png_ptr, 0, PNG_FILTER_NONE);
-	
+
 	png_set_IHDR (png_ptr, info_ptr, width, height, image_pixel_depth, PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
-	
+
 	png_write_info (png_ptr, info_ptr);
-	
+
 	if(image_pixel_depth < 8)
 		png_set_packing (png_ptr);
-	
+
 	row_pointers = (png_bytep*)malloc(sizeof(png_bytep)*height);
-	
+
 	if (row_pointers == NULL)
 	{
 		fprintf (stderr, "PNG error: unable to allocate row_pointers\n");
@@ -830,21 +830,21 @@ int	WritePNGImage(FILE *outputfile,icns_image_t *image,icns_image_t *mask)
 				free(row_pointers);
 				return -1;
 			}
-			
+
 			for(j = 0; j < width; j++)
 			{
 				pixel32_t	*src_rgb_pixel;
 				pixel32_t	*src_pha_pixel;
 				pixel32_t	*dst_pixel;
-				
+
 				dst_pixel = (pixel32_t *)&(row_pointers[i][j*image_channels]);
-				
+
 				src_rgb_pixel = (pixel32_t *)&(image->imageData[i*width*image_channels+j*image_channels]);
 
 				dst_pixel->r = src_rgb_pixel->r;
 				dst_pixel->g = src_rgb_pixel->g;
 				dst_pixel->b = src_rgb_pixel->b;
-				
+
 				if(mask != NULL) {
 					src_pha_pixel = (pixel32_t *)&(mask->imageData[i*width*mask_channels+j*mask_channels]);
 					dst_pixel->a = src_pha_pixel->a;
@@ -854,13 +854,13 @@ int	WritePNGImage(FILE *outputfile,icns_image_t *image,icns_image_t *mask)
 			}
 		}
 	}
-	
+
 	png_write_image (png_ptr,row_pointers);
-	
+
 	png_write_end (png_ptr, info_ptr);
-	
+
 	png_destroy_write_struct (&png_ptr, &info_ptr);
-	
+
 	for (j = 0; j < height; j++)
 		free(row_pointers[j]);
 	free(row_pointers);

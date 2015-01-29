@@ -16,7 +16,7 @@ Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the
-Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
@@ -140,8 +140,8 @@ typedef struct icns_icon_info_t
 #define ICNS_OPEN_VARIANT             0x6F70656E  // "open"
 #define ICNS_OPEN_DROP_VARIANT        0x6F647270  // "odrp"
 
-#define ICNS_NULL_DATA                0x00000000 
-#define ICNS_NULL_MASK                0x00000000 
+#define ICNS_NULL_DATA                0x00000000
+#define ICNS_NULL_MASK                0x00000000
 
 /* icns file / resource type constants */
 
@@ -149,7 +149,7 @@ typedef struct icns_icon_info_t
 
 #define ICNS_MACBINARY_TYPE           0x6D42494E  // "mBIN"
 
-#define ICNS_NULL_TYPE                0x00000000 
+#define ICNS_NULL_TYPE                0x00000000
 
 /* icns error return values */
 

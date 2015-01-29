@@ -16,7 +16,7 @@ Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the
-Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
@@ -41,25 +41,25 @@ int icns_create_family(icns_family_t **iconFamilyOut)
 		icns_print_err("icns_create_family: icon family reference is NULL!\n");
 		return ICNS_STATUS_NULL_PARAM;
 	}
-	
+
 	*iconFamilyOut = NULL;
-	
+
 	iconFamilyType = ICNS_FAMILY_TYPE;
 	iconFamilySize = sizeof(icns_type_t) + sizeof(icns_size_t);
 
 	newIconFamily = malloc(iconFamilySize);
-		
+
 	if(newIconFamily == NULL)
 	{
 		icns_print_err("icns_create_family: Unable to allocate memory block of size: %d!\n",iconFamilySize);
 		return ICNS_STATUS_NO_MEMORY;
 	}
-	
+
 	ICNS_WRITE_UNALIGNED(&(newIconFamily->resourceType), iconFamilyType, sizeof(icns_type_t));
 	ICNS_WRITE_UNALIGNED(&(newIconFamily->resourceSize), iconFamilySize, sizeof(icns_size_t));
 
 	*iconFamilyOut = newIconFamily;
-	
+
 	return ICNS_STATUS_OK;
 }
 
@@ -87,9 +87,9 @@ int icns_count_elements_in_family(icns_family_t *iconFamily, icns_sint32_t *elem
 
 	ICNS_READ_UNALIGNED(iconFamilyType, &(iconFamily->resourceType),sizeof( icns_type_t));
 	ICNS_READ_UNALIGNED(iconFamilySize, &(iconFamily->resourceSize),sizeof( icns_size_t));
-	
+
 	dataOffset = sizeof(icns_type_t) + sizeof(icns_size_t);
-	
+
 	while( dataOffset < iconFamilySize )
 	{
 		icns_element_t	       *iconElement = NULL;
@@ -97,7 +97,7 @@ int icns_count_elements_in_family(icns_family_t *iconFamily, icns_sint32_t *elem
 
 		iconElement = ((icns_element_t*)(((char*)iconFamily)+dataOffset));
 		ICNS_READ_UNALIGNED(elementSize, &(iconElement->elementSize),sizeof( icns_size_t));
-		
+
 		elementCount++;
 
 		dataOffset += elementSize;

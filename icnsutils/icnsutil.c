@@ -86,31 +86,31 @@ static int	write_png(FILE *outputfile,icns_image_t *image,icns_image_t *mask)
 	png_infop 		info_ptr;
 	png_bytep 		*row_pointers;
 	int			i, j;
-	
+
 	if (image == NULL)
 	{
 		fprintf (stderr, "icns image NULL!\n");
 		return -1;
 	}
-	
+
 	width = image->imageWidth;
 	height = image->imageHeight;
 	image_channels = image->imageChannels;
 	image_pixel_depth = image->imagePixelDepth;
-	
+
 	#if DEBUG_ICNSUTIL
 	printf("width: %d\n",width);
 	printf("height: %d\n",height);
 	printf("image_channels: %d\n",image_channels);
 	printf("image_pixel_depth: %d\n",image_pixel_depth);
 	#endif
-	
+
 	if(mask != NULL) {
 		mask_channels = mask->imageChannels;
 	}
-	
+
 	png_ptr = png_create_write_struct (PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-	
+
 	if (png_ptr == NULL)
 	{
 		fprintf (stderr, "PNG error: cannot allocate libpng main struct\n");
@@ -129,16 +129,16 @@ static int	write_png(FILE *outputfile,icns_image_t *image,icns_image_t *mask)
 	png_init_io(png_ptr, outputfile);
 
 	png_set_filter(png_ptr, 0, PNG_FILTER_NONE);
-	
+
 	png_set_IHDR (png_ptr, info_ptr, width, height, image_pixel_depth, PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
-	
+
 	png_write_info (png_ptr, info_ptr);
-	
+
 	if(image_pixel_depth < 8)
 		png_set_packing (png_ptr);
-	
+
 	row_pointers = (png_bytep*)malloc(sizeof(png_bytep)*height);
-	
+
 	if (row_pointers == NULL)
 	{
 		fprintf (stderr, "PNG error: unable to allocate row_pointers\n");
@@ -155,21 +155,21 @@ static int	write_png(FILE *outputfile,icns_image_t *image,icns_image_t *mask)
 				free(row_pointers);
 				return -1;
 			}
-			
+
 			for(j = 0; j < width; j++)
 			{
 				pixel32_t	*src_rgb_pixel;
 				pixel32_t	*src_pha_pixel;
 				pixel32_t	*dst_pixel;
-				
+
 				dst_pixel = (pixel32_t *)&(row_pointers[i][j*image_channels]);
-				
+
 				src_rgb_pixel = (pixel32_t *)&(image->imageData[i*width*image_channels+j*image_channels]);
 
 				dst_pixel->r = src_rgb_pixel->r;
 				dst_pixel->g = src_rgb_pixel->g;
 				dst_pixel->b = src_rgb_pixel->b;
-				
+
 				if(mask != NULL) {
 					src_pha_pixel = (pixel32_t *)&(mask->imageData[i*width*mask_channels+j*mask_channels]);
 					dst_pixel->a = src_pha_pixel->a;
@@ -179,13 +179,13 @@ static int	write_png(FILE *outputfile,icns_image_t *image,icns_image_t *mask)
 			}
 		}
 	}
-	
+
 	png_write_image (png_ptr,row_pointers);
-	
+
 	png_write_end (png_ptr, info_ptr);
-	
+
 	png_destroy_write_struct (&png_ptr, &info_ptr);
-	
+
 	for (j = 0; j < height; j++)
 		free(row_pointers[j]);
 	free(row_pointers);
@@ -330,15 +330,15 @@ static int add_png_to_family(icns_family_t **iconFamily, char *pngname)
 	char maskStr[5] = {0,0,0,0,0};
 	int iconDataOffset = 0;
 	int maskDataOffset = 0;
-    
+
     char isHiDPI = 0;
-    
+
     int pngnamelen = strlen(pngname);
     int namea2xpng = pngnamelen - 7;
 
 	png_bytep buffer;
 	int width, height, bpp;
-    
+
 	if(namea2xpng > 0) {
 			if(memcmp(&pngname[namea2xpng],"@2x.png",7) == 0) {
 					isHiDPI = 1;
@@ -347,7 +347,7 @@ static int add_png_to_family(icns_family_t **iconFamily, char *pngname)
 					isHiDPI = 1;
 			}
 	}
-    
+
 	pngfile = fopen(pngname, "rb");
 	if (pngfile == NULL)
 	{
@@ -412,9 +412,9 @@ static int add_png_to_family(icns_family_t **iconFamily, char *pngname)
 
 		return FALSE;
 	}
-	
+
 	icns_set_print_errors(1);
-	
+
 	#if DEBUG_ICNSUTIL
 	if(maskType != ICNS_NULL_TYPE)
 	{
@@ -425,9 +425,9 @@ static int add_png_to_family(icns_family_t **iconFamily, char *pngname)
 		printf("Using icns type '%s' (ARGB) for '%s'\n", iconStr, pngname);
 	}
 	#endif
-	
+
 	icnsErr = icns_new_element_from_image(&icnsImage, iconType, &iconElement);
-	
+
 	if (iconElement != NULL)
 	{
 		if (icnsErr == ICNS_STATUS_OK)
@@ -443,7 +443,7 @@ static int add_png_to_family(icns_family_t **iconFamily, char *pngname)
 
 		iconDataOffset = 0;
 		maskDataOffset = 0;
-	
+
 		while ((iconDataOffset < icnsImage.imageDataSize) && (maskDataOffset < icnsMask.imageDataSize))
 		{
 			icnsMask.imageData[maskDataOffset] = icnsImage.imageData[iconDataOffset+3];
@@ -461,7 +461,7 @@ static int add_png_to_family(icns_family_t **iconFamily, char *pngname)
 			}
 			free(maskElement);
 		}
-		
+
 		icns_free_image(&icnsMask);
 	}
 
@@ -485,35 +485,35 @@ int iconset_to_icns(char *srcfile, char *dstfile)
 	char *outfile = NULL;
 	int	srclen = strlen(srcfile);
 	int i = 0;
-	
+
 	pngfile = malloc(srclen + 32);
 	strncpy(&pngfile[0],&srcfile[0],srclen);
 	pngfile[srclen] = '/';
-	
+
 	if(dstfile == NULL) {
 		int srcstart = srclen - 1;
-		
+
 		while(srcfile[srcstart] != '/' && srcfile[srcstart] != '.' && srcstart > 0)
 			srcstart--;
-			
+
 		if(srcfile[srcstart] != '.' || srcstart == 0)
 			srcstart = srclen;
-			
+
 		outfile = malloc(srclen + 6);
 		strncpy(&outfile[0],&srcfile[0],srcstart);
 		strncpy(&outfile[srcstart],".icns",6);
 		dstfile = outfile;
 	}
-	
+
 	icnsfile = fopen (dstfile, "wb+");
 	if (icnsfile == NULL)
 	{
 		fprintf (stderr, "Could not open '%s' for writing: %s\n", dstfile, strerror(errno));
 		goto cleanup;
 	}
-	
+
 	icns_create_family(&iconFamily);
-	
+
 	while(iconset_names[i] != NULL) {
 		strcpy(&pngfile[srclen],iconset_names[i]);
 		#if DEBUG_ICNSUTIL
@@ -522,7 +522,7 @@ int iconset_to_icns(char *srcfile, char *dstfile)
 		add_png_to_family(&iconFamily,pngfile);
 		i++;
 	}
-    
+
 	if (icns_write_family_to_file(icnsfile, iconFamily) != ICNS_STATUS_OK)
 	{
 		fprintf(stderr, "Failed to write icns file\n");
@@ -535,18 +535,18 @@ int iconset_to_icns(char *srcfile, char *dstfile)
   #if DEBUG_ICNSUTIL
 	printf("Saved icns file to %s\n",dstfile);
 	#endif
-	
+
 cleanup:
 
 	if(iconFamily != NULL)
 		free(iconFamily);
-		
+
 	if(outfile != NULL)
 		free(outfile);
-		
+
 	if(pngfile != NULL)
 		free(pngfile);
-		
+
 	return 0;
 }
 
@@ -562,26 +562,26 @@ int icns_to_iconset(char *srcfile, char *dstpath)
 	icns_image_t iconImage;
 	int i = 0;
 	int error = 0;
-	
+
 	// Initialize the icon image
 	memset ( &iconImage, 0, sizeof(icns_image_t) );
-	
+
 	// If no dstpath given, create one based on the filename
 	if(dstpath == NULL) {
 		int srcstart = srclen - 1;
-		
+
 		while(srcfile[srcstart] != '/' && srcfile[srcstart] != '.' && srcstart > 0)
 			srcstart--;
-			
+
 		if(srcfile[srcstart] != '.' || srcstart == 0)
 			srcstart = srclen;
-			
+
 		outfile = malloc(srclen + 9);
 		strncpy(&outfile[0],&srcfile[0],srcstart);
 		strncpy(&outfile[srcstart],".iconset",9);
 		dstpath = outfile;
 	}
-	
+
 	// Prepare the dstfile variable for use
 	dstpathlen = strlen(dstpath);
 	dstfilelen = dstpathlen + 24;
@@ -600,7 +600,7 @@ int icns_to_iconset(char *srcfile, char *dstpath)
 	}
 	error = icns_read_family_from_file(inFile,&iconFamily);
 	fclose(inFile);
-	
+
 	// Create the .iconset directory
 	if (mkdir(dstpath,0777) == -1) {
 	  if(errno == EEXIST) {
@@ -611,7 +611,7 @@ int icns_to_iconset(char *srcfile, char *dstpath)
 	    goto cleanup;
 	  }
 	}
-	
+
 	// Loop through all the expected names/types and try to find + save
 	while(iconset_names[i] != NULL) {
 		int iconset_namelen = strlen(iconset_names[i]);
@@ -645,26 +645,26 @@ int icns_to_iconset(char *srcfile, char *dstpath)
 		icns_free_image(&iconImage);
 		i++;
 	}
-	
+
 	free(dstfile);
-	
+
 	cleanup:
-	
+
 	if(outfile) {
 		free(outfile);
 		outfile = NULL;
 	}
-	
+
 	return error;
 }
 
 int main(int argc, char **argv)
 {
 	int (*conv_fn)(char *,char *);
-	
+
 	if (argc < 4)
 		usage();
-		
+
 	if ( strcmp(argv[1],"-c") != 0)
 		usage();
 
@@ -674,12 +674,12 @@ int main(int argc, char **argv)
 		conv_fn = &icns_to_iconset;
 	else
 		usage();
-	
+
 	if (strcmp(argv[3],"-o") == 0) {
 		return (*conv_fn)(argv[5],argv[4]);
 	} else {
 		return (*conv_fn)(argv[3],NULL);
 	}
-	
+
 	return 0;
 }

@@ -110,7 +110,7 @@ static inline void icns_write_be(void *outp, void *inp, int size)
 
 As the macro names imply, these functions are safe to use on architectures
 that do not deal well with unaligned memory access.
-   
+
 -------------------------------------------------------------------------------
 Where there are endian issues in the first place
 
@@ -129,7 +129,7 @@ IconFamilyElement and IconFamilyResource data types (which also include the
 data types IconFamilyPtr and IconFamilyHandle) are always big-endian. There
 may be other functions and data types that are not listed here. Consult the
 appropriate API reference for information on data returned by a function. For
-more information see 
+more information see
 Network-Related Data.
 -------------------------------------------------------------------------------
 Source: http://developer.apple.com/documentation/MacOSX/Conceptual/
@@ -162,32 +162,32 @@ icns element is basically an 8-byte header, followed by icon data
 +4 byte int - total size of icns data: equal to total element size
 == data size equal to (elementSize - 8)
 
-1-bit ich#, icm#, ics#, ICN#, icon notes 
-- data is 8 pixels to a byte. 
+1-bit ich#, icm#, ics#, ICN#, icon notes
+- data is 8 pixels to a byte.
 - mask data follows the icon data
 - example: data should be 256 bytes long for 32x32 icons
 --- 128 bytes (32*32) / 8 for the icon data
 --- 128 bytes (32*32) / 8 for the mask data
 
-4-bit ich4, icm4, ics4, icl4, icon notes 
+4-bit ich4, icm4, ics4, icl4, icon notes
 - data is 2 pixels to a byte, mask data is not part of the resource
 - data is in 16 indexed colors, libicns provides the 32-bit colormap
 - example: data should be 512 bytes long for 32x32 icons
 --- 512 bytes (32*32) / 2 for the icon data
 
-8-bit ich8, icm8, ics8, icl8, icon notes 
+8-bit ich8, icm8, ics8, icl8, icon notes
 - data is 1 pixels to a byte, mask data is not part of the resource
 - data is in 256 indexed colors, libicns provides the 32-bit colormap
 - example: data should be 1024 bytes long for 32x32 icons
 --- 1024 bytes (32*32) for the icon data
 
-32-bit icon notes (size < 256x256) 
+32-bit icon notes (size < 256x256)
 - data may or may not be RLE ecoded. Older icons never were, but newer
 - icon editors seem to RLE encode even 16x16 32-bit icons. Mac OS seems
 - to have no problem with this although only 128x128 icons were originally
 - compressed using RLE.
 
-32-bit icon notes (size >= 256x256) 
+32-bit icon notes (size >= 256x256)
 - data may be either jp2 or PNG encoded
 - valid sizes are: 256x256, 512x512, 1024x1024
 
