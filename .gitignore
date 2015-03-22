@@ -35,3 +35,7 @@ stamp-h1
 icns2png
 icontainer2icns
 png2icns
+icnsutils/icns2png.exe
+icnsutils/icnsutil.exe
+icnsutils/icontainer2icns.exe
+icnsutils/png2icns.exe
